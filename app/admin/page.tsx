@@ -66,9 +66,20 @@ export default function AdminPage() {
             <a href="/admin/training" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Training</a>
             <a href="/admin/settings" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Settings</a>
           </nav>
-          <div className="p-3 border-t border-yellow-600 border-opacity-30">
+         <div className="p-3 border-t border-yellow-600 border-opacity-30">
             <div className="text-xs font-semibold" style={{ color: '#F4EFE3' }}>{user.display_name}</div>
             <div className="text-xs" style={{ color: '#C47A2C' }}>Administrator</div>
+            <button
+              onClick={async () => {
+                const supabase = createClient()
+                await supabase.auth.signOut()
+                window.location.href = '/login'
+              }}
+              className="mt-2 text-xs w-full text-left"
+              style={{ color: 'rgba(244,239,227,0.5)' }}
+            >
+              Sign out
+            </button>
           </div>
         </div>
         <div className="flex-1 p-8">
