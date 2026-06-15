@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import AdminSidebar from '@/components/layout/AdminSidebar'
+import StainedGlassBar from '@/components/layout/StainedGlassBar'
 
 const GRADES = [0,1,2,3,4,5,6,7,8,9,10,11,12]
 const GRADE_LABELS: Record<number, string> = {0:'K',1:'1',2:'2',3:'3',4:'4',5:'5',6:'6',7:'7',8:'8',9:'9',10:'10',11:'11',12:'12'}
@@ -93,33 +95,9 @@ export default function AnnouncementsPage() {
 
   return (
     <div className="min-h-screen" style={{ background: '#F4EFE3' }}>
-      <div style={{ height: '6px', background: 'linear-gradient(90deg, #275FA8 0% 25%, #8C1D2C 25% 50%, #2E6B4A 50% 75%, #C47A2C 75% 100%)' }} />
+      <StainedGlassBar />
       <div className="flex h-screen">
-        <div style={{ width: '220px', background: '#5B2C83' }} className="flex flex-col">
-          <div className="p-4 text-center border-b border-yellow-600 border-opacity-30">
-            <div className="text-white font-bold text-sm">Rex Christus Academy</div>
-            <div className="text-xs mt-1" style={{ color: '#C47A2C' }}>Administration</div>
-            <div className="text-xs mt-1 italic" style={{ color: 'rgba(201,163,58,0.6)' }}>No King But Christ</div>
-          </div>
-          <nav className="flex-1 p-3">
-            <a href="/admin" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Dashboard</a>
-            <a href="/admin/students" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Students</a>
-            <a href="/admin/staff" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Staff</a>
-            <a href="/admin/curriculum" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Curriculum</a>
-            <a href="/admin/calendar" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Calendar</a>
-            <a href="/admin/announcements" className="flex items-center px-3 py-2 rounded text-sm mb-1 font-bold" style={{ color: '#C47A2C' }}>Announcements</a>
-            <a href="/admin/forms" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Forms and Payments</a>
-            <a href="/admin/prayer" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Prayer Board</a>
-            <a href="/admin/messages" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Messages</a>
-            <a href="/admin/training" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Training</a>
-            <a href="/admin/settings" className="flex items-center px-3 py-2 rounded text-sm mb-1" style={{ color: 'rgba(244,239,227,0.75)' }}>Settings</a>
-          </nav>
-          <div className="p-3 border-t border-yellow-600 border-opacity-30">
-            <div className="text-xs font-semibold" style={{ color: '#F4EFE3' }}>{user.display_name}</div>
-            <div className="text-xs" style={{ color: '#C47A2C' }}>Administrator</div>
-            <button onClick={async () => { const supabase = createClient(); await supabase.auth.signOut(); window.location.href = '/login' }} className="mt-2 text-xs w-full text-left" style={{ color: 'rgba(244,239,227,0.5)' }}>Sign out</button>
-          </div>
-        </div>
+      <AdminSidebar displayName={user.display_name} activePage="/admin/announcements" />
 
         <div className="flex-1 p-8 overflow-y-auto">
           <h1 className="text-2xl font-bold mb-6" style={{ color: '#C47A2C' }}>Announcements</h1>
@@ -231,7 +209,7 @@ export default function AnnouncementsPage() {
           </div>
         </div>
       </div>
-      <div style={{ height: '6px', background: 'linear-gradient(90deg, #275FA8 0% 25%, #8C1D2C 25% 50%, #2E6B4A 50% 75%, #C47A2C 75% 100%)' }} />
+      <StainedGlassBar />
     </div>
   )
 }
