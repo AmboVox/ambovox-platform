@@ -38,7 +38,7 @@ export default function AdminPage() {
     <div className="flex flex-col min-h-screen" style={{ background: '#F4EFE3' }}>
       <StainedGlassBar />
       <div className="flex flex-1 overflow-hidden">
-        <AdminSidebar displayName={user.display_name} activePage="/admin" />
+        <AdminSidebar displayName={user.display_name} activePage="/admin" badges={{ training: 2, calendar: 3, announcements: 1, forms: 7, prayer: 1, messages: 5 }} />
         <div className="flex-1 p-8 overflow-y-auto">
           <h1 className="text-2xl font-bold mb-6" style={{ color: '#C47A2C' }}>Admin Dashboard</h1>
           <div className="grid grid-cols-3 gap-4">

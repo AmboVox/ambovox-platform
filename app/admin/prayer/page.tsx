@@ -61,7 +61,7 @@ export default function PrayerBoardPage() {
     <div className="flex flex-col min-h-screen" style={{ background: '#F4EFE3' }}>
       <StainedGlassBar />
       <div className="flex flex-1 overflow-hidden">
-        <AdminSidebar displayName={user.display_name} activePage="/admin/prayer" />
+        <AdminSidebar displayName={user.display_name} activePage="/admin/prayer" badges={{ training: 2, calendar: 3, announcements: 1, forms: 7, prayer: 1, messages: 5 }} />
         <div className="flex-1 p-8 overflow-y-auto">
           <h1 className="text-2xl font-bold mb-2" style={{ color: '#C47A2C' }}>Prayer Board</h1>
           <p className="text-sm text-gray-500 mb-6">All requests are reviewed before posting. Students never see this board.</p>

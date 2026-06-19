@@ -55,7 +55,7 @@ export default function MessagesPage() {
     <div className="flex flex-col min-h-screen" style={{ background: '#F4EFE3' }}>
       <StainedGlassBar />
       <div className="flex flex-1 overflow-hidden">
-        <AdminSidebar displayName={user.display_name} activePage="/admin/messages" />
+        <AdminSidebar displayName={user.display_name} activePage="/admin/messages" badges={{ training: 2, calendar: 3, announcements: 1, forms: 7, prayer: 1, messages: 5 }} />
         <div className="flex-1 flex overflow-hidden">
           <div style={{ width: '200px', minWidth: '200px', borderRight: '1px solid #d0c4a0', background: 'white', display: 'flex', flexDirection: 'column' }}>
             <div style={{ padding: '10px 12px', borderBottom: '1px solid #ede8dc', fontWeight: '700', fontSize: '13px', color: '#C47A2C' }}>Inbox</div>

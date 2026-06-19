@@ -97,7 +97,7 @@ export default function AnnouncementsPage() {
     <div className="min-h-screen" style={{ background: '#F4EFE3' }}>
       <StainedGlassBar />
       <div className="flex h-screen">
-      <AdminSidebar displayName={user.display_name} activePage="/admin/announcements" />
+      <AdminSidebar displayName={user.display_name} activePage="/admin/announcements" badges={{ training: 2, calendar: 3, announcements: 1, forms: 7, prayer: 1, messages: 5 }} />
 
         <div className="flex-1 p-8 overflow-y-auto">
           <h1 className="text-2xl font-bold mb-6" style={{ color: '#C47A2C' }}>Announcements</h1>

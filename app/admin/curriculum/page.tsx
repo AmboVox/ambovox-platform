@@ -71,7 +71,7 @@ export default function CurriculumPage() {
     <div className="flex flex-col min-h-screen" style={{ background: '#F4EFE3' }}>
       <StainedGlassBar />
       <div className="flex flex-1 overflow-hidden">
-        <AdminSidebar displayName={user.display_name} activePage="/admin/curriculum" />
+        <AdminSidebar displayName={user.display_name} activePage="/admin/curriculum" badges={{ training: 2, calendar: 3, announcements: 1, forms: 7, prayer: 1, messages: 5 }} />
         <div className="flex-1 p-8 overflow-y-auto">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold" style={{ color: '#C47A2C' }}>Curriculum</h1>
