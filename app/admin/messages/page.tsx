@@ -18,10 +18,21 @@ const DEMO_MESSAGES = [
   { id: 2, sender: 'You', mine: true, text: 'Thank you for flagging this, Ms. Hart. I will contact the Ellis family today. I can also see from the attendance log that Devon has missed 12 days this semester. I will escalate this to our counseling team.' },
 ]
 
+import { useSearchParams } from 'next/navigation'
+
 export default function MessagesPage() {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  const [activeThread, setActiveThread] = useState(DEMO_THREADS[0])
+  const searchParams = useSearchParams()
+  const toParam = searchParams.get('to')
+  const [activeThread, setActiveThread] = useState(() => {
+    if (toParam) {
+      const match = DEMO_THREADS.find(t => t.name === toParam)
+      if (match) return match
+      return { id: 999, name: toParam, role: 'Parent', preview: 'New conversation', time: 'Now', active: true }
+    }
+return DEMO_THREADS[0]
+  })
   const [newMessage, setNewMessage] = useState('')
   const [messages, setMessages] = useState(DEMO_MESSAGES)
   const router = useRouter()
