@@ -36,6 +36,7 @@ export default function SettingsPage() {
   const [fontSize, setFontSize] = useState('Medium')
   const [gradeLogos, setGradeLogos] = useState<Record<number,string>>({})
   const [minGPA, setMinGPA] = useState('2.0')
+  const [cutoffLetter, setCutoffLetter] = useState('F')
   const [useCustomScale, setUseCustomScale] = useState(false)
   const [saved, setSaved] = useState(false)
   const router = useRouter()
@@ -218,16 +219,28 @@ export default function SettingsPage() {
                 ))}
               </div>
 
-              <div className="bg-white rounded-lg border p-6" style={{ borderColor: '#d0c4a0' }}>
+             <div className="bg-white rounded-lg border p-6" style={{ borderColor: '#d0c4a0' }}>
                 <h2 className="font-bold text-purple-900 mb-3">Athletics Minimum GPA</h2>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '14px' }}>
                   <select value={minGPA} onChange={(e) => setMinGPA(e.target.value)} style={{ padding: '7px 10px', border: '1px solid #c8bea0', borderRadius: '4px', fontSize: '12px' }}>
                     <option>1.5</option>
                     <option>2.0</option>
                     <option>2.5</option>
                     <option>3.0</option>
                   </select>
-                  <span style={{ fontSize: '11px', color: '#888' }}>Hard rule: no failing class grades (cannot be changed)</span>
+                  <span style={{ fontSize: '11px', color: '#888' }}>Minimum unweighted GPA required to participate</span>
+                </div>
+                <div style={{ borderTop: '1px solid #ede8dc', paddingTop: '12px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: '600', marginBottom: '8px' }}>Hard Class-Grade Cutoff</div>
+                  <p style={{ fontSize: '11px', color: '#888', marginBottom: '10px' }}>A student with any class grade at or below this letter is automatically ineligible, regardless of overall GPA.</p>
+                  <div style={{ display: 'flex', gap: '14px' }}>
+                    {['F','D','C'].map(letter => (
+                      <label key={letter} style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '12px', padding: '6px 14px', border: cutoffLetter === letter ? '2px solid #C47A2C' : '1px solid #c8bea0', borderRadius: '6px', background: cutoffLetter === letter ? '#fdebd0' : 'white' }}>
+                        <input type="radio" name="cutoff" checked={cutoffLetter === letter} onChange={() => setCutoffLetter(letter)} />
+                        <span style={{ fontWeight: '700' }}>{letter}</span> or below
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
 
