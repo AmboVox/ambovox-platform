@@ -20,6 +20,7 @@ interface ParentSidebarProps {
     announcements?: number
     forms?: number
     prayer?: number
+    issues?: number
   }
 }
 
@@ -165,6 +166,7 @@ export default function ParentSidebar({
             <NavLink href="/parent/grades" label="Grades & Report Card" />
             <NavLink href="/parent/attendance" label="Attendance" />
             <NavLink href="/parent/assignments" label="Assignments" />
+            <NavLink href="/parent/courses" label="Lesson Content" />
           </div>
         )}
 
@@ -175,6 +177,7 @@ export default function ParentSidebar({
             <NavLink href="/parent/messages" label="Messages" badge={badges.messages} />
             <NavLink href="/parent/conferences" label="Conferences" />
             <NavLink href="/parent/prayer" label="✝️ Prayer Board" badge={badges.prayer} />
+            <NavLink href="/parent/issues" label="Report an Issue" badge={badges.issues} />
           </div>
         )}
 
