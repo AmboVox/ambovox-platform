@@ -20,6 +20,7 @@ export default function AdminSidebar({ displayName, activePage, badges = {} }: A
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     people: true,
     academic: true,
+    coursebuilder: true,
     operations: true,
     training: true,
   })
@@ -122,6 +123,13 @@ export default function AdminSidebar({ displayName, activePage, badges = {} }: A
             <NavLink href="/admin/curriculum" label="Curriculum" />
             <NavLink href="/admin/honor-roll" label="Honor Roll" />
             <NavLink href="/admin/athletics" label="Athletics" />
+          </div>
+        )}
+
+        <SectionHeader id="coursebuilder" label="Course Builder" />
+        {openSections.coursebuilder && (
+          <div style={{ marginBottom: '6px' }}>
+            <NavLink href="/admin/course-builder" label="Elementary Subjects" />
           </div>
         )}
 

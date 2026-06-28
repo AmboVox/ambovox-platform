@@ -6,11 +6,97 @@ import { useRouter } from 'next/navigation'
 import TeacherSidebar from '@/components/layout/TeacherSidebar'
 import StainedGlassBar from '@/components/layout/StainedGlassBar'
 
+const EMOJI_OPTIONS = [
+  '📖','📚','✏️','🔢','🔤','✝️','🙏','🌍','🔬','🧪',
+  '🎨','🎵','🏛️','🌿','🐾','🎭','🏃','📜','🌱','🎯',
+  '🔭','🌈','📐','🗺️','🌊','🦁','🎤','👏','⭐','🏠',
+  '🐄','🌎','🎸','⚽','🦋','🍎','✍️','🖊️','🎺','🥁',
+  '🌸','🐝','🦅','⛪','🕊️','📿','🗝️','🏺','🌻','🎪',
+]
+
+function hexToLightBg(hex: string): string {
+  try {
+    const r = parseInt(hex.slice(1, 3), 16)
+    const g = parseInt(hex.slice(3, 5), 16)
+    const b = parseInt(hex.slice(5, 7), 16)
+    return `rgba(${r},${g},${b},0.12)`
+  } catch {
+    return '#f9f6ee'
+  }
+}
+
+function isValidHex(hex: string): boolean {
+  return /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hex)
+}
+
+function rgbToHex(rgb: string): string {
+  const match = rgb.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/)
+  if (!match) return ''
+  const r = parseInt(match[1]).toString(16).padStart(2, '0')
+  const g = parseInt(match[2]).toString(16).padStart(2, '0')
+  const b = parseInt(match[3]).toString(16).padStart(2, '0')
+  return `#${r}${g}${b}`
+}
+
+function ColorInput({ value, onChange }: { value: string; onChange: (hex: string) => void }) {
+  const [textValue, setTextValue] = useState(value)
+  const [error, setError] = useState('')
+
+  function handleTextChange(raw: string) {
+    setTextValue(raw)
+    setError('')
+    const hex = raw.startsWith('#') ? raw : '#' + raw
+    if (isValidHex(hex)) {
+      onChange(hex.toLowerCase())
+      return
+    }
+    if (raw.toLowerCase().startsWith('rgb')) {
+      const converted = rgbToHex(raw)
+      if (converted) {
+        onChange(converted)
+        return
+      }
+    }
+    if (raw.length > 2) setError('Enter a hex (e.g. #2E6B4A) or rgb (e.g. rgb(46,107,74))')
+  }
+
+  function handlePickerChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const hex = e.target.value
+    onChange(hex)
+    setTextValue(hex)
+    setError('')
+  }
+
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <input
+          type="color"
+          value={isValidHex(value) ? value : '#2e6b4a'}
+          onChange={handlePickerChange}
+          style={{ width: '40px', height: '36px', border: '1px solid #c8bea0', borderRadius: '4px', cursor: 'pointer', padding: '2px' }}
+        />
+        <input
+          value={textValue}
+          onChange={e => handleTextChange(e.target.value)}
+          onFocus={() => setTextValue(value)}
+          placeholder="#2E6B4A or rgb(46,107,74)"
+          style={{ flex: 1, padding: '7px 10px', border: `1px solid ${error ? '#b91c1c' : '#c8bea0'}`, borderRadius: '4px', fontSize: '12px', fontFamily: 'monospace' }}
+        />
+      </div>
+      {error && <div style={{ fontSize: '10px', color: '#b91c1c', marginTop: '4px' }}>{error}</div>}
+    </div>
+  )
+}
+
 export default function CourseBuilderPage() {
   const [user, setUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [dayType, setDayType] = useState('home')
   const [contentType, setContentType] = useState('learning')
+  const [courseEmoji, setCourseEmoji] = useState('📐')
+  const [courseColor, setCourseColor] = useState('#1a5276')
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -40,6 +126,7 @@ export default function CourseBuilderPage() {
       <div className="flex flex-1 overflow-hidden">
         <TeacherSidebar displayName={user.display_name} isTA={isTA} activePage="/teacher/builder" badges={{ training: 1, calendar: 2, announcements: 1, messages: 3 }} />
         <div className="flex-1 p-6 overflow-hidden flex flex-col">
+
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold" style={{ color: '#2E6B4A' }}>Course Builder</h1>
             <div style={{ display: 'flex', gap: '8px' }}>
@@ -54,6 +141,8 @@ export default function CourseBuilderPage() {
           </div>
 
           <div style={{ display: 'flex', gap: '14px', flex: 1, overflow: 'hidden' }}>
+
+            {/* Left: Outline panel */}
             <div style={{ width: '230px', minWidth: '230px', overflowY: 'auto' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span style={{ fontSize: '10px', fontWeight: '700', color: '#2E6B4A', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Outline</span>
@@ -84,7 +173,67 @@ export default function CourseBuilderPage() {
               </div>
             </div>
 
+            {/* Right: Lesson editor */}
             <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '11px' }}>
+
+              {/* ── COURSE APPEARANCE ── */}
+              <div style={{ background: 'white', border: '1px solid #d0c4a0', borderRadius: '8px', padding: '14px 16px' }}>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: '#2E6B4A', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>
+                  Course Appearance
+                </div>
+                <p style={{ fontSize: '11px', color: '#888', marginBottom: '12px' }}>
+                  The emoji appears on all student portal types. The color is used for Middle and High School student portals. Enter a hex code (e.g. #2E6B4A) or RGB value (e.g. rgb(46,107,74)).
+                </p>
+
+                <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+
+                  {/* Emoji picker */}
+                  <div style={{ flex: '0 0 auto' }}>
+                    <label style={{ fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', color: '#888', display: 'block', marginBottom: '6px' }}>Course Emoji</label>
+                    <button
+                      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                      style={{ width: '64px', height: '64px', borderRadius: '12px', background: hexToLightBg(courseColor), border: `2px solid ${courseColor}`, fontSize: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      {courseEmoji}
+                    </button>
+                    <div style={{ fontSize: '10px', color: '#aaa', marginTop: '4px', textAlign: 'center' }}>Click to change</div>
+                  </div>
+
+                  {/* Color picker */}
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', color: '#888', display: 'block', marginBottom: '6px' }}>
+                      Course Color <span style={{ fontWeight: '400', textTransform: 'none', color: '#aaa' }}>(Middle & High School)</span>
+                    </label>
+                    <ColorInput value={courseColor} onChange={setCourseColor} />
+                    {/* Live preview */}
+                    <div style={{ marginTop: '10px', padding: '10px 14px', borderRadius: '8px', background: hexToLightBg(courseColor), border: `1px solid ${courseColor}30`, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span style={{ fontSize: '22px' }}>{courseEmoji}</span>
+                      <span style={{ fontSize: '13px', fontWeight: '700', color: courseColor }}>Algebra II Honors</span>
+                      <span style={{ fontSize: '10px', color: courseColor, marginLeft: 'auto', opacity: 0.6 }}>Preview</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Emoji grid */}
+                {showEmojiPicker && (
+                  <div style={{ marginTop: '12px', padding: '10px', background: '#f9f6ee', borderRadius: '8px', border: '1px solid #d0c4a0' }}>
+                    <div style={{ fontSize: '10px', fontWeight: '600', color: '#888', textTransform: 'uppercase', marginBottom: '8px' }}>Choose Emoji</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '4px' }}>
+                      {EMOJI_OPTIONS.map(e => (
+                        <button
+                          key={e}
+                          onClick={() => { setCourseEmoji(e); setShowEmojiPicker(false) }}
+                          style={{ fontSize: '20px', padding: '6px', border: courseEmoji === e ? '2px solid #C47A2C' : '1px solid transparent', borderRadius: '6px', cursor: 'pointer', background: courseEmoji === e ? '#fdebd0' : 'white' }}
+                        >
+                          {e}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* ── LESSON FIELDS ── */}
               <div>
                 <label style={{ fontSize: '10px', fontWeight: '600', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>Lesson Title</label>
                 <input defaultValue="Intro to Real Numbers" style={{ width: '100%', padding: '7px 10px', border: '1px solid #c8bea0', borderRadius: '4px', fontSize: '12px' }} />
@@ -145,6 +294,7 @@ export default function CourseBuilderPage() {
                   <input placeholder="Brief commendation..." style={{ flex: 2, padding: '7px 10px', border: '1px solid #c8bea0', borderRadius: '4px', fontSize: '12px' }} />
                 </div>
               </div>
+
             </div>
           </div>
         </div>
